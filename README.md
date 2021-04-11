@@ -2,9 +2,9 @@
 
 **Maintenance** - A set of handy commands for app maintanence.
 
-[![PHP Package Tests](https://github.com/grafiteinc/Database/workflows/PHP%20Package%20Tests/badge.svg)](https://github.com/grafiteinc/Database/actions?query=workflow%3A%22PHP+Package+Tests%22)
-[![Packagist](https://img.shields.io/packagist/dt/grafite/database.svg)](https://packagist.org/packages/grafite/database)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://packagist.org/packages/grafite/database)
+[![PHP Package Tests](https://github.com/grafiteinc/Maintenance/workflows/PHP%20Package%20Tests/badge.svg)](https://github.com/grafiteinc/Maintenance/actions?query=workflow%3A%22PHP+Package+Tests%22)
+[![Packagist](https://img.shields.io/packagist/dt/grafite/maintenance.svg)](https://packagist.org/packages/grafite/maintenance)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://packagist.org/packages/grafite/maintenance)
 
 The Grafite Maintenance package is a collection of commands to help with app maintenance. This package has commands which can help delete old logs, and system leftovers which can eat up server space over time.
 
