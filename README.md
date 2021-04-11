@@ -1,26 +1,25 @@
-![Grafite Database](GrafiteDatabase-banner.png)
+![Grafite Maintenance](GrafiteMaintenance-banner.png)
 
-**Database** - A set of handy commands for MySQL databases.
+**Maintenance** - A set of handy commands for app maintanence.
 
-[![Build Status](https://travis-ci.org/GrafiteInc/database.svg?branch=master)](https://travis-ci.org/GrafiteInc/database)
-[![Maintainability](https://api.codeclimate.com/v1/badges/8c00a046fec32d8b8ac7/maintainability)](https://codeclimate.com/github/GrafiteInc/database/maintainability)
+[![PHP Package Tests](https://github.com/grafiteinc/Database/workflows/PHP%20Package%20Tests/badge.svg)](https://github.com/grafiteinc/Database/actions?query=workflow%3A%22PHP+Package+Tests%22)
 [![Packagist](https://img.shields.io/packagist/dt/grafite/database.svg)](https://packagist.org/packages/grafite/database)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://packagist.org/packages/grafite/database)
 
-The Grafite Database package is a collection of commands to help with MySQL related concerns in developing including: creating databases, dropping them, backing them up and restoring them.
+The Grafite Maintenance package is a collection of commands to help with app maintenance. This package has commands which can help delete old logs, and system leftovers which can eat up server space over time.
 
 ##### Author(s):
 * [Matt Lantz](https://github.com/mlantz) ([@mattylantz](http://twitter.com/mattylantz), mattlantz at gmail dot com)
 
 ## Requirements
 
-1. PHP 7.2+
+1. PHP 7.4+
 
 ## Compatibility and Support
 
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
-| ^6.x - ^7.x | 1.x | yes |
+| ^7.x - ^8.x | 0.1.x | yes |
 
 ### Installation
 
@@ -29,14 +28,14 @@ Start a new Laravel project:
 composer create-project laravel/laravel your-project-name
 ```
 
-Then run the following to add Grafite Database
+Then run the following to add Grafite Maintenance
 ```php
-composer require "grafite/database"
+composer require "grafite/maintenance"
 ```
 
 ## Documentation
 
-[https://docs.grafite.ca/utilities/database](https://docs.grafite.ca/utilities/database)
+[https://docs.grafite.ca/utilities/maintenance](https://docs.grafite.ca/utilities/maintenance)
 
 ## License
 Grafite Database is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
