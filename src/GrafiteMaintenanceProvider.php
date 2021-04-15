@@ -7,6 +7,8 @@ use Grafite\Maintenance\Commands\LogPurge;
 use Grafite\Maintenance\Commands\GZipPurge;
 use Grafite\Maintenance\Commands\JournalVacuum;
 use Grafite\Maintenance\Commands\PackageCleaner;
+use Grafite\Maintenance\Commands\JsParseOutdated;
+use Grafite\Maintenance\Commands\PhpParseOutdated;
 
 class GrafiteMaintenanceProvider extends ServiceProvider
 {
@@ -33,6 +35,8 @@ class GrafiteMaintenanceProvider extends ServiceProvider
             LogPurge::class,
             JournalVacuum::class,
             PackageCleaner::class,
+            JsParseOutdated::class,
+            PhpParseOutdated::class,
         ]);
     }
 }
