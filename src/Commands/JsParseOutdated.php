@@ -28,7 +28,7 @@ class JsParseOutdated extends AppCommand
      */
     public function handle()
     {
-        $path = app_path();
+        $path = base_path();
 
         $command = new Command("cd $path && npm outdated --json=true");
         if ($command->execute()) {

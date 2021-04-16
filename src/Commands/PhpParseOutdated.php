@@ -28,7 +28,7 @@ class PhpParseOutdated extends AppCommand
      */
     public function handle()
     {
-        $path = app_path();
+        $path = base_path();
 
         $command = new Command("cd $path && composer outdated --format=json");
         if ($command->execute()) {
