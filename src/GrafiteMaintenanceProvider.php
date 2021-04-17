@@ -9,6 +9,7 @@ use Grafite\Maintenance\Commands\JournalVacuum;
 use Grafite\Maintenance\Commands\PackageCleaner;
 use Grafite\Maintenance\Commands\JsParseOutdated;
 use Grafite\Maintenance\Commands\PhpParseOutdated;
+use Grafite\Maintenance\Commands\UpgradablePackages;
 
 class GrafiteMaintenanceProvider extends ServiceProvider
 {
@@ -37,6 +38,7 @@ class GrafiteMaintenanceProvider extends ServiceProvider
             PackageCleaner::class,
             JsParseOutdated::class,
             PhpParseOutdated::class,
+            UpgradablePackages::class,
         ]);
     }
 }
