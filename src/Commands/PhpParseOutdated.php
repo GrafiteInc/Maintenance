@@ -30,12 +30,28 @@ class PhpParseOutdated extends AppCommand
     {
         $path = base_path();
 
-        $command = new Command("cd $path && composer outdated --format=json");
+        $command = new Command("cd ${path} && composer outdated --format=json");
+
         if ($command->execute()) {
-            $this->info($command->getOutput());
+            $data = collect(json_decode($command->getOutput(), true)['installed']);
+            $updateable = [];
+
+            $data->each(function ($item) use (&$updateable) {
+                if (in_array($item['latest-status'], ['update-possible', 'semver-safe-update'])) {
+                    $updateable[] = '<b>' . $item['name'] . '</b>@' . $item['version'] . ' to ' . $item['latest'];
+                }
+            });
+
+            $response = 'No packages require updating at this time.';
+
+            if (count($updateable) > 0) {
+                $response = 'We recommend updating the following packages:<br><br>' . implode('<br>', $updateable);
+            }
+
+            $this->info($response);
         } else {
             $this->warn($command->getError());
             $this->error($command->getExitCode());
-        };
+        }
     }
 }

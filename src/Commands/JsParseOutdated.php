@@ -30,12 +30,26 @@ class JsParseOutdated extends AppCommand
     {
         $path = base_path();
 
-        $command = new Command("cd $path && npm outdated --json=true");
+        $command = new Command("cd ${path} && npm outdated --json=true");
+
         if ($command->execute()) {
-            $this->info($command->getOutput());
+            $data = collect(json_decode($command->getOutput(), true));
+            $updateable = [];
+
+            $data->each(function ($details, $item) use (&$updateable) {
+                $updateable[] = '<b>' . $item . '</b>@' . $details['current'] . ' to ' . $details['latest'];
+            });
+
+            $response = 'No packages require updating at this time.';
+
+            if (count($updateable) > 0) {
+                $response = 'We recommend updating the following packages:<br><br>' . implode('<br>', $updateable);
+            }
+
+            $this->info($response);
         } else {
             $this->warn($command->getError());
             $this->error($command->getExitCode());
-        };
+        }
     }
 }
