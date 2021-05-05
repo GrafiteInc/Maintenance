@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v0.2.3] - 2021-05-05
+
+### Fixed
+- Issue with path for gzip cleanup
+
 ## [v0.2.2] - 2021-04-26
 
 ### Fixed
