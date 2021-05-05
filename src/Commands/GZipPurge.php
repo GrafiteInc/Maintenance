@@ -38,7 +38,11 @@ class GZipPurge extends AppCommand
      */
     public function handle()
     {
-        $path = $this->option('path') ?? storage_path('logs');
+        $path = $this->option('path');
+
+        if (! $path) {
+            $path = storage_path('logs');
+        }
 
         $command = new Command("cd $path && rm *.gz");
         if ($command->execute()) {
