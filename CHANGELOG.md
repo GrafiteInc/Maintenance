@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v0.3.1] - 2023-03-07
+
+### Fixed
+- Small issue with composer
+
 ## [v0.3.0] - 2023-03-03
 
 ### Added
