@@ -30,7 +30,7 @@ class PhpParseOutdated extends AppCommand
     {
         $path = base_path();
 
-        $command = new Command("cd ${path} && composer outdated --format=json");
+        $command = new Command("cd ${path} && /usr/local/bin/composer outdated --format=json");
 
         if ($command->execute()) {
             $data = collect(json_decode($command->getOutput(), true)['installed']);
