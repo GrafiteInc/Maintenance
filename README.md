@@ -19,7 +19,7 @@ The Grafite Maintenance package is a collection of commands to help with app mai
 
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
-| ^7.x - ^8.x | 0.1.x | yes |
+| ^7.x - ^11.x | 0.3.x | yes |
 
 ### Installation
 
