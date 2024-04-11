@@ -5,6 +5,7 @@ namespace Grafite\Maintenance;
 use Illuminate\Support\ServiceProvider;
 use Grafite\Maintenance\Commands\LogPurge;
 use Grafite\Maintenance\Commands\GZipPurge;
+use Grafite\Maintenance\Commands\LogArchive;
 use Grafite\Maintenance\Commands\JournalVacuum;
 use Grafite\Maintenance\Commands\PackageCleaner;
 use Grafite\Maintenance\Commands\JsParseOutdated;
@@ -34,6 +35,7 @@ class GrafiteMaintenanceProvider extends ServiceProvider
         $this->commands([
             GZipPurge::class,
             LogPurge::class,
+            LogArchive::class,
             JournalVacuum::class,
             PackageCleaner::class,
             JsParseOutdated::class,
