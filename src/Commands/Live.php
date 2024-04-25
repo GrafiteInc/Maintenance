@@ -37,7 +37,9 @@ class Live extends AppCommand
      */
     public function handle()
     {
-        unlink(base_path('public/index.html'));
+        copy(base_path('public/index-bk.php'), base_path('public/index.php'));
+
+        unlink(base_path('public/index-bk.php'));
 
         $this->info('Application is now in live mode');
     }

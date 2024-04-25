@@ -37,8 +37,10 @@ class Updating extends AppCommand
      */
     public function handle()
     {
+        copy(base_path('public/index.php'), base_path('public/index-bk.php'));
+
         file_put_contents(
-            base_path('public/index.html'),
+            base_path('public/index.php'),
             file_get_contents(base_path('vendor/grafite/maintenance/resources/maintenance.html'))
         );
 
