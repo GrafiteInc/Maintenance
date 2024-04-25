@@ -2,8 +2,10 @@
 
 namespace Grafite\Maintenance;
 
+use Grafite\Maintenance\Commands\Live;
 use Illuminate\Support\ServiceProvider;
 use Grafite\Maintenance\Commands\LogPurge;
+use Grafite\Maintenance\Commands\Updating;
 use Grafite\Maintenance\Commands\GZipPurge;
 use Grafite\Maintenance\Commands\LogArchive;
 use Grafite\Maintenance\Commands\JournalVacuum;
@@ -33,6 +35,8 @@ class GrafiteMaintenanceProvider extends ServiceProvider
         |--------------------------------------------------------------------------
         */
         $this->commands([
+            Live::class,
+            Updating::class,
             GZipPurge::class,
             LogPurge::class,
             LogArchive::class,
