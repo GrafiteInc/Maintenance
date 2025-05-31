@@ -2,7 +2,8 @@
 
 **Maintenance** - A set of handy commands for app maintanence.
 
-[![PHP Package Tests](https://github.com/grafiteinc/Maintenance/workflows/PHP%20Package%20Tests/badge.svg)](https://github.com/grafiteinc/Maintenance/actions?query=workflow%3A%22PHP+Package+Tests%22)
+[![Build Status](https://github.com/GrafiteInc/Maintenance/actions/workflows/php-package-tests.yml/badge.svg?branch=main)](https://github.com/GrafiteInc/Maintenance/actions/workflows/php-package-tests.yml)
+[![Maintainability](https://qlty.sh/badges/3d7cf51b-5cc4-484f-afba-53a0e79a0644/maintainability.svg)](https://qlty.sh/gh/GrafiteInc/projects/Maintenance)
 [![Packagist](https://img.shields.io/packagist/dt/grafite/maintenance.svg)](https://packagist.org/packages/grafite/maintenance)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://packagist.org/packages/grafite/maintenance)
 
@@ -13,13 +14,13 @@ The Grafite Maintenance package is a collection of commands to help with app mai
 
 ## Requirements
 
-1. PHP 7.4+
+1. PHP 7.4+|8.2+
 
 ## Compatibility and Support
 
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
-| ^7.x - ^11.x | 0.3.x | yes |
+| ^7.x - ^12.x | 0.3.x | yes |
 
 ### Installation
 
