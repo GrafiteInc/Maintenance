@@ -20,7 +20,7 @@ The Grafite Maintenance package is a collection of commands to help with app mai
 
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
-| ^7.x - ^12.x | 0.3.x | yes |
+| ^7.x - ^12.x | 0.6.x | yes |
 
 ### Installation
 
@@ -36,7 +36,8 @@ composer require "grafite/maintenance"
 
 ## Documentation
 
-[https://docs.grafite.ca/utilities/maintenance](https://docs.grafite.ca/utilities/maintenance)
+[https://documentation.grafite.ca/docs/utilities-maintenance](https://documentation.grafite.ca/docs/utilities-maintenance)
+
 
 ## License
 Grafite Database is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
