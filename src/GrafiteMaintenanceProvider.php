@@ -3,6 +3,9 @@
 namespace Grafite\Maintenance;
 
 use Grafite\Maintenance\Commands\Live;
+use Grafite\Maintenance\Commands\Audit;
+use Grafite\Maintenance\Support\Shell;
+use Grafite\Maintenance\Commands\Report;
 use Illuminate\Support\ServiceProvider;
 use Grafite\Maintenance\Commands\LogPurge;
 use Grafite\Maintenance\Commands\Updating;
@@ -16,24 +19,21 @@ use Grafite\Maintenance\Commands\UpgradablePackages;
 
 class GrafiteMaintenanceProvider extends ServiceProvider
 {
-    /**
-     * Boot method.
-     */
-    public function boot()
+    public function boot(): void
     {
-        // do nothing
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../config/maintenance.php' => config_path('maintenance.php'),
+            ], 'maintenance-config');
+        }
     }
 
-    /**
-     * Register the service provider.
-     */
-    public function register()
+    public function register(): void
     {
-        /*
-        |--------------------------------------------------------------------------
-        | Register the Commands
-        |--------------------------------------------------------------------------
-        */
+        $this->mergeConfigFrom(__DIR__ . '/../config/maintenance.php', 'maintenance');
+
+        $this->app->singleton(Shell::class);
+
         $this->commands([
             Live::class,
             Updating::class,
@@ -45,6 +45,8 @@ class GrafiteMaintenanceProvider extends ServiceProvider
             JsParseOutdated::class,
             PhpParseOutdated::class,
             UpgradablePackages::class,
+            Report::class,
+            Audit::class,
         ]);
     }
 }
