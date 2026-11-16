@@ -1,0 +1,4 @@
+{
+  "axios": {"current": "1.6.0", "wanted": "1.7.9", "latest": "1.7.9", "dependent": "app", "location": "node_modules/axios"},
+  "vite": {"wanted": "6.0.7", "latest": "6.0.7", "dependent": "app", "location": "node_modules/vite"}
+}

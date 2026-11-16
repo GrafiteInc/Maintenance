@@ -3,6 +3,31 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 ----
 
+## [v0.8.0] - Unreleased
+
+### Feature
+- `maintenance:report` health snapshot: reboot required, apt security updates, PHP end of life, outdated packages
+- `maintenance:audit` security audit: composer audit, npm audit, APP_DEBUG/APP_KEY/https checks, .env drift, exposed public files
+- `--format=table|json|mission-control`; `Report::toMissionControl()` returns arguments ready for `mission_control_notify()`
+- Publishable `config/maintenance.php` (sudo strategy, binaries, thresholds, checks, tags)
+- `FakeShell` for testing
+
+### Fix
+- `maintenance:gzip-purge --path=` now takes a value (it was a boolean flag)
+- Shell arguments are escaped
+- Every sudo call gets the password; previously the second command in `log-purge` and `package-cleaner` ran without it
+- `package-cleaner` runs `apt-get -y` so it no longer hangs waiting for confirmation
+- `SUDO_PW` is read through config, so it works with `config:cache`
+- `js-outdated` no longer treats npm's exit code 1 (outdated packages found) as an error
+- `maintenance:updating` serves the page with a 503 + `Retry-After`, and refuses to run twice, which used to overwrite the backup
+- `maintenance:live` and `maintenance:log-archive` fail gracefully when there is no backup or disk
+- Removed the hardcoded `/usr/local/bin/composer` and vendor paths
+
+### Breaking
+- Sudo now defaults to `sudo -n` (sudoers) unless `SUDO_PW` is set or `MAINTENANCE_SUDO` says otherwise
+- `php-outdated`, `js-outdated` print console tables instead of HTML
+- Commands return proper exit codes
+
 ## [v0.7.0] - 2026-04-07
 
 ### Feature

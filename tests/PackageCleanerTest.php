@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
-
 class PackageCleanerTest extends TestCase
 {
-    public function testPackageCleaner()
+    public function testPackageCleanerIsNonInteractiveAndSudoesBothCommands()
     {
-        $this->markTestSkipped('This test is skipped because it requires a specific environment setup.');
+        $shell = $this->fakeShell()->fake('sudo *');
 
-        Artisan::call('maintenance:package-cleaner');
+        $this->artisan('maintenance:package-cleaner')->assertExitCode(0);
 
-        $this->assertStringContainsString('Sorry, try again.', Artisan::output());
+        $this->assertSame([
+            "sudo -n apt-get '-y' 'autoremove'",
+            "sudo -n apt-get '-y' 'autoclean'",
+        ], $shell->commands());
     }
 }

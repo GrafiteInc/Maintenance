@@ -1,0 +1,11 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "cross-spawn": {"name": "cross-spawn", "severity": "high", "isDirect": false, "via": [], "effects": [], "range": "7.0.0 - 7.0.4", "nodes": [], "fixAvailable": true},
+    "nanoid": {"name": "nanoid", "severity": "moderate", "isDirect": false, "via": [], "effects": [], "range": "<3.3.8", "nodes": [], "fixAvailable": true}
+  },
+  "metadata": {
+    "vulnerabilities": {"info": 0, "low": 0, "moderate": 1, "high": 1, "critical": 0, "total": 2},
+    "dependencies": {"prod": 120, "dev": 0, "optional": 3, "peer": 0, "peerOptional": 0, "total": 122}
+  }
+}

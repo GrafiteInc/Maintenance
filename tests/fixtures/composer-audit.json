@@ -1,0 +1,11 @@
+{
+    "advisories": {
+        "league/commonmark": [
+            {"advisoryId": "PKSA-1234", "packageName": "league/commonmark", "affectedVersions": "<2.6.0", "title": "Quadratic complexity in table parsing", "cve": "CVE-2025-46734", "link": "https://example.test/1", "reportedAt": "2025-05-05T00:00:00+00:00", "sources": [], "severity": "high"}
+        ],
+        "symfony/http-foundation": [
+            {"advisoryId": "PKSA-5678", "packageName": "symfony/http-foundation", "affectedVersions": "<7.1.7", "title": "Open redirect via browser-sanitized URLs", "cve": null, "link": "https://example.test/2", "reportedAt": "2024-11-06T00:00:00+00:00", "sources": [], "severity": "medium"}
+        ]
+    },
+    "abandoned": {"fruitcake/laravel-cors": null}
+}

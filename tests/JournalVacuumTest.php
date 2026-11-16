@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
-
 class JournalVacuumTest extends TestCase
 {
     public function testJournalVacuum()
     {
-        $this->markTestSkipped('This test is skipped because it requires a specific environment setup.');
+        $shell = $this->fakeShell()->fake('sudo *', 'Vacuuming done, freed 1.2G');
 
-        Artisan::call('maintenance:journal-vacuum');
+        $this->artisan('maintenance:journal-vacuum', ['--time' => '7d'])
+            ->expectsOutputToContain('Vacuuming done')
+            ->assertExitCode(0);
 
-        $this->assertStringContainsString('Sorry, try again.', Artisan::output());
+        $this->assertSame(["sudo -n journalctl '--vacuum-time=7d'"], $shell->commands());
     }
 }
