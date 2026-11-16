@@ -7,41 +7,46 @@ use Illuminate\Console\Command as AppCommand;
 
 class LogArchive extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'maintenance:log-archive';
+    protected $signature = 'maintenance:log-archive {--disk=backup : Filesystem disk to archive to}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Archive log files';
+    protected $description = 'Archive yesterday\'s log files to a filesystem disk';
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function handle(): int
     {
-        $logs = scandir(base_path('storage/logs'));
+        $disk = (string) $this->option('disk');
 
-        $date = now()->yesterday()->format('Y-m-d');
+        if (is_null(config("filesystems.disks.{$disk}"))) {
+            $this->error("The [{$disk}] filesystem disk is not configured.");
 
-        if (in_array('scheduler.log', $logs)) {
-            $this->info('Archiving scheduler.log');
-            Storage::disk('backup')->put("logs/scheduler-$date.log", file_get_contents(base_path('storage/logs/scheduler.log')));
+            return self::FAILURE;
         }
 
-        if (in_array("laravel-$date.log", $logs)) {
-            $this->info("Archiving laravel-$date.log");
-            Storage::disk('backup')->put("logs/laravel-$date.log", file_get_contents(base_path("storage/logs/laravel-$date.log")));
+        $date = now()->subDay()->format('Y-m-d');
+
+        $files = [
+            'scheduler.log' => "logs/scheduler-{$date}.log",
+            "laravel-{$date}.log" => "logs/laravel-{$date}.log",
+        ];
+
+        foreach ($files as $file => $destination) {
+            $path = storage_path("logs/{$file}");
+
+            if (! is_file($path)) {
+                continue;
+            }
+
+            $this->info("Archiving {$file}");
+
+            $stream = fopen($path, 'r');
+            Storage::disk($disk)->put($destination, $stream);
+
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
         }
 
         $this->info('Archived logs');
+
+        return self::SUCCESS;
     }
 }

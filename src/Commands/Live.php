@@ -6,41 +6,25 @@ use Illuminate\Console\Command as AppCommand;
 
 class Live extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'maintenance:live';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Place an application in live mode after updating';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function handle(): int
     {
-        parent::__construct();
-    }
+        $backup = public_path('index-bk.php');
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        copy(base_path('public/index-bk.php'), base_path('public/index.php'));
+        if (! file_exists($backup)) {
+            $this->warn('No public/index-bk.php backup found, the application is not in maintenance mode.');
 
-        unlink(base_path('public/index-bk.php'));
+            return self::FAILURE;
+        }
+
+        copy($backup, public_path('index.php'));
+        unlink($backup);
 
         $this->info('Application is now in live mode');
+
+        return self::SUCCESS;
     }
 }

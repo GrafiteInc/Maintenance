@@ -2,48 +2,37 @@
 
 namespace Grafite\Maintenance\Commands;
 
-use mikehaertl\shellcommand\Command;
+use Grafite\Maintenance\Support\Shell;
 use Illuminate\Console\Command as AppCommand;
+use Grafite\Maintenance\Parsers\AptUpgradable;
 
 class UpgradablePackages extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'maintenance:upgradable';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Get a count of upgradable server packages.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(Shell $shell): int
     {
-        $command = new Command("apt list --upgradable");
+        $result = $shell->run('apt', ['list', '--upgradable']);
 
-        if ($command->execute()) {
-            $data = explode("\n", $command->getOutput());
-            $count = count($data) - 1;
+        if ($result->failed()) {
+            $this->warn($result->error);
+            $this->error("apt list failed with exit code {$result->exitCode}");
 
-            $response = 'Your server has no upgradable packages at this time.';
-
-            if ($count > 0) {
-                $response = "Your server has {$count} upgradable packages.";
-            }
-
-            $this->info($response);
-        } else {
-            $this->warn($command->getError());
-            $this->error($command->getExitCode());
+            return self::FAILURE;
         }
+
+        $upgradable = AptUpgradable::parse($result->output);
+
+        if ($upgradable['total'] === 0) {
+            $this->info('Your server has no upgradable packages at this time.');
+
+            return self::SUCCESS;
+        }
+
+        $this->info("Your server has {$upgradable['total']} upgradable packages ({$upgradable['security']} security).");
+
+        return self::SUCCESS;
     }
 }

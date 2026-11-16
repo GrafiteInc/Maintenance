@@ -2,41 +2,22 @@
 
 namespace Grafite\Maintenance\Commands;
 
-use mikehaertl\shellcommand\Command;
+use Grafite\Maintenance\Support\Shell;
 use Illuminate\Console\Command as AppCommand;
+use Grafite\Maintenance\Concerns\HandlesShellResults;
 
 class JournalVacuum extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'maintenance:journal-vacuum';
+    use HandlesShellResults;
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    protected $signature = 'maintenance:journal-vacuum {--time=2d : Keep journal entries newer than this}';
+
     protected $description = 'Clear the journal files.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(Shell $shell): int
     {
-        $command = 'journalctl --vacuum-time=2d';
-        $password = env('SUDO_PW');
-
-        $command = new Command("echo '$password' | sudo -S -k $command");
-        if ($command->execute()) {
-            $this->info($command->getOutput());
-        } else {
-            $this->warn($command->getError());
-            $this->error($command->getExitCode());
-        };
+        return $this->reportResults(
+            $shell->run('journalctl', ['--vacuum-time=' . $this->option('time')], sudo: true)
+        );
     }
 }

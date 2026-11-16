@@ -2,41 +2,23 @@
 
 namespace Grafite\Maintenance\Commands;
 
-use mikehaertl\shellcommand\Command;
+use Grafite\Maintenance\Support\Shell;
 use Illuminate\Console\Command as AppCommand;
+use Grafite\Maintenance\Concerns\HandlesShellResults;
 
 class PackageCleaner extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    use HandlesShellResults;
+
     protected $signature = 'maintenance:package-cleaner';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Clean the packages';
+    protected $description = 'Remove unused apt packages and clean the package cache';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(Shell $shell): int
     {
-        $command = 'apt-get autoremove && apt-get autoclean';
-        $password = env('SUDO_PW');
-
-        $command = new Command("echo '$password' | sudo -S -k $command");
-        if ($command->execute()) {
-            $this->info($command->getOutput());
-        } else {
-            $this->warn($command->getError());
-            $this->error($command->getExitCode());
-        };
+        return $this->reportResults(
+            $shell->run('apt-get', ['-y', 'autoremove'], sudo: true),
+            $shell->run('apt-get', ['-y', 'autoclean'], sudo: true),
+        );
     }
 }

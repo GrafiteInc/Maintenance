@@ -2,56 +2,46 @@
 
 namespace Grafite\Maintenance\Commands;
 
-use mikehaertl\shellcommand\Command;
+use Grafite\Maintenance\Support\Shell;
 use Illuminate\Console\Command as AppCommand;
+use Grafite\Maintenance\Parsers\ComposerOutdated;
 
 class PhpParseOutdated extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'maintenance:php-outdated';
+    protected $signature = 'maintenance:php-outdated {--direct : Only show direct dependencies}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Parsing of outdated PHP packages';
+    protected $description = 'List outdated composer packages';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function handle()
+    public function handle(Shell $shell): int
     {
-        $path = base_path();
+        $args = ['outdated', '--format=json', '--no-interaction', '--no-ansi'];
 
-        $command = new Command("cd ${path} && /usr/local/bin/composer outdated --format=json");
-
-        if ($command->execute()) {
-            $data = collect(json_decode($command->getOutput(), true)['installed']);
-            $updateable = [];
-
-            $data->each(function ($item) use (&$updateable) {
-                if (in_array($item['latest-status'], ['update-possible', 'semver-safe-update'])) {
-                    $updateable[] = '<b>' . $item['name'] . '</b>@' . $item['version'] . ' to ' . $item['latest'];
-                }
-            });
-
-            $response = 'No packages require updating at this time.';
-
-            if (count($updateable) > 0) {
-                $response = 'We recommend updating the following packages:<br><br>' . implode('<br>', $updateable);
-            }
-
-            $this->info($response);
-        } else {
-            $this->warn($command->getError());
-            $this->error($command->getExitCode());
+        if ($this->option('direct')) {
+            $args[] = '--direct';
         }
+
+        $result = $shell->run('composer', $args, cwd: base_path());
+        $packages = ComposerOutdated::parse($result->output);
+
+        if (is_null($packages)) {
+            $this->warn($result->error);
+            $this->error("composer outdated failed with exit code {$result->exitCode}");
+
+            return self::FAILURE;
+        }
+
+        if (empty($packages)) {
+            $this->info('No packages require updating at this time.');
+
+            return self::SUCCESS;
+        }
+
+        $this->info('We recommend updating the following packages:');
+        $this->table(['Package', 'Current', 'Latest'], array_map(
+            fn ($package) => [$package['name'], $package['current'], $package['latest']],
+            $packages
+        ));
+
+        return self::SUCCESS;
     }
 }

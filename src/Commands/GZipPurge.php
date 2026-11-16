@@ -2,54 +2,39 @@
 
 namespace Grafite\Maintenance\Commands;
 
-use mikehaertl\shellcommand\Command;
+use Grafite\Maintenance\Support\Shell;
+use Grafite\Maintenance\Support\Format;
 use Illuminate\Console\Command as AppCommand;
+use Grafite\Maintenance\Concerns\HandlesShellResults;
 
 class GZipPurge extends AppCommand
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'maintenance:gzip-purge {--path}';
+    use HandlesShellResults;
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    protected $signature = 'maintenance:gzip-purge {--path= : Directory to purge (defaults to storage/logs)}';
+
     protected $description = 'Purge the gzip files';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function handle(Shell $shell): int
     {
-        parent::__construct();
-    }
+        $path = $this->option('path') ?: storage_path('logs');
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
-    {
-        $path = $this->option('path');
+        if (! is_dir($path)) {
+            $this->error("Directory not found: {$path}");
 
-        if (! $path) {
-            $path = storage_path('logs');
+            return self::FAILURE;
         }
 
-        $command = new Command("cd $path && rm *.gz");
-        if ($command->execute()) {
-            $this->info($command->getOutput());
-        } else {
-            $this->warn($command->getError());
-            $this->error($command->getExitCode());
-        };
+        $result = $shell->run('find', [$path, '-maxdepth', '1', '-type', 'f', '-name', '*.gz', '-print', '-delete']);
+
+        if ($result->failed()) {
+            return $this->reportResults($result);
+        }
+
+        $deleted = array_filter(explode("\n", $result->output));
+
+        $this->info('Deleted ' . Format::count(count($deleted), 'gzip file') . " from {$path}");
+
+        return self::SUCCESS;
     }
 }
